@@ -34,14 +34,17 @@ export default function LoginPage() {
             <h1 className="text-3xl">Login Page</h1>
             <div className="mt-6 flex items-center justify-center flex-col">
                 <label htmlFor="email" className="mx-2">Email:</label>
-                <input type="email" value={user.email} onChange={(e) => setUser({ ...user, email: e.target.value })} placeholder="enter your email" className="rounded-full p-2" />
+                <input type="email" value={user.email} onChange={(e) => setUser({ ...user, email: e.target.value })} placeholder="enter your email" className="rounded-full p-2" required />
 
                 <label htmlFor="password" className="mx-2">Password:</label>
-                <input type="password" value={user.password} onChange={(e) => setUser({ ...user, password: e.target.value })} placeholder="enter your password" className="rounded-full p-2" />
+                <input type="password" value={user.password} onChange={(e) => setUser({ ...user, password: e.target.value })} placeholder="enter your password" className="rounded-full p-2" required />
 
-                <button onClick={onLogin} className="rounded-full bg-black text-white p-3 mt-7 w-[100px]">{loading ? "Loading..." : "Login"}</button>
+                <button onClick={onLogin} className="rounded-full bg-black text-white p-3 mt-7 w-[100px]">{loading ? "loading..." : "Login"}</button>
 
-                <Link className="mt-2" href={"/signup"}>Visit Signup Page</Link>
+                <div className="mt-2">
+                    Don&apos;t have an account?
+                    <Link className=" text-blue-800 ml-2" href={"/signup"}>Signup here</Link>
+                </div>
             </div>
         </div>
     )

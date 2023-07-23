@@ -46,7 +46,10 @@ export default function SignupPage() {
 
                 <button onClick={onSignup} className="rounded-full bg-black text-white p-3 mt-7 w-[100px]">{loading ? "loading..." : "signup"}</button>
 
-                <Link className="mt-2" href={"/login"}>Visit Login Page</Link>
+                <div className="mt-2">
+                    Already have an account?
+                    <Link className="mt-2 text-blue-800 ml-2" href={"/login"}>Login here</Link>
+                </div>
             </div>
         </div>
     )
