@@ -21,6 +21,7 @@ export default function SignupPage() {
         try {
             setLoading(true)
             const response = await axios.post("/api/users/signup", user);
+            console.log("UserWithToken", response.data)
             console.log("User signed up successfully", response.data);
             router.push("/login")
         } catch (error) {
