@@ -38,17 +38,16 @@ export async function POST(request: NextRequest) {
 
     const savedUser = await newUser.save();
 
-    const mailinfo = await sendEmail({
-      email,
-      emailType: "VERIFY",
-      userId: savedUser._id,
-    });
+    // const mailinfo = await sendEmail({
+    //   email,
+    //   emailType: "VERIFY",
+    //   userId: savedUser._id,
+    // });
 
     return NextResponse.json({
       message: "User created successfully",
       success: true,
       savedUser,
-      mailinfo,
     });
   } catch (error) {
     return NextResponse.json(

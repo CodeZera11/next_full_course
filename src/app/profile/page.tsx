@@ -1,5 +1,6 @@
 "use client";
 
+import { sendEmail } from '@/helpers/mailer';
 import axios from 'axios';
 import { useRouter } from 'next/navigation';
 import React, { useState } from 'react';
@@ -11,6 +12,7 @@ const ProfilePage = () => {
     const router = useRouter()
     const [loading, setLoading] = useState(false);
     const [data, setData] = useState(null)
+    const [verificationStatus, setVerificationStatus] = useState(false);
 
     const logout = async () => {
         try {
@@ -30,7 +32,6 @@ const ProfilePage = () => {
     const fetchUser = async () => {
         try {
             const response = await axios.get('/api/users/userProfile');
-
             return response
 
         } catch (error) {
@@ -71,9 +72,38 @@ const ProfilePage = () => {
         }
     }
 
+    const handleVerify = async () => {
+        try {
+            const response: any = await fetchUser();
+            setVerificationStatus(response.data.user.isVerfied);
+
+            const { email, _id } = await response.data.user;
+
+            const emailType = "VERIFY"
+            const userId = _id
+
+            toast.loading("verifying email...")
+            const emailsender = await axios.post("/api/users/sendEmail", { email, emailType, userId })
+            console.log(emailsender)
+            toast.dismiss()
+            toast.success("Email Verified Successfully")
+            setVerificationStatus(true)
+
+        } catch (error: any) {
+            toast.error(error.message);
+        }
+    }
+
     return (
         <div className='w-full min-h-screen flex flex-col items-center justify-center bg-gray-700'>
             <h1 className='text-4xl text-white'>Profile Page</h1>
+            <p className='text-sm ml-[5.55rem] mt-2'>{
+                verificationStatus ? (
+                    <p className='text-green-500'>Verified</p>
+                ) : (
+                    <button onClick={handleVerify}>Click here to Verify</button>
+                )
+            }</p>
             <div className='mt-10 flex flex-col text-white justify-center items-center'>
                 <p className='text'>User Details: {data ? `${data}` : "null"}</p>
                 <button disabled={data ? true : false} className=' disabled:opacity-50 text-sm w-[150px] mt-3 bg-orange-500 text-black rounded-full px-4 py-2' onClick={getUser}>Get User Details</button>
