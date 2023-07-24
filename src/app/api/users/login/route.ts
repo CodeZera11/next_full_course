@@ -19,13 +19,13 @@ export async function POST(req: NextRequest) {
     const user = await User.findOne({ email });
 
     if (!user) {
-      return NextResponse.json({ error: "No user found" });
+      return NextResponse.json({ error: "No user found!" });
     }
 
     const validatePassword = await bcryptjs.compare(password, user.password);
 
     if (!validatePassword) {
-      return NextResponse.json({ error: "Password does not match" });
+      return NextResponse.json({ error: "Incorrect Password!" });
     }
 
     const tokenData = {

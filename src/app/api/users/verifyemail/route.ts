@@ -1,12 +1,14 @@
 import { connectToDB } from "@/dbConfig";
 import User from "@/models/userModel";
 import { NextRequest, NextResponse } from "next/server";
+import bcryptjs from "bcryptjs";
 
 connectToDB();
 
 export async function POST(request: NextRequest) {
   try {
-    const { token }: any = request.json();
+    const reqBody = await request.json();
+    const { token } = reqBody;
 
     const user = await User.findOne({
       verifyToken: token,
@@ -14,14 +16,18 @@ export async function POST(request: NextRequest) {
     });
 
     if (!user) {
-      return NextResponse.json({ error: "User not found" }, { status: 400 });
+      return NextResponse.json({ error: "Invalid token" }, { status: 400 });
     }
 
     user.isVerfied = true;
-    user.forgotPasswordToken = undefined;
-    user.forgotPasswordTokenExpiry = undefined;
+    user.verifyToken = undefined;
+    user.verifyTokenExpiry = undefined;
+    await user.save();
 
-    user.save();
+    return NextResponse.json({
+      message: "Email verified successfully",
+      success: true,
+    });
   } catch (error: any) {
     return NextResponse.json({ error: error.message }, { status: 500 });
   }

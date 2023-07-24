@@ -4,6 +4,7 @@ const nodemailer = require("nodemailer");
 
 export const sendEmail = async ({ email, emailType, userId }: any) => {
   try {
+    // create a hased token
     const hashedToken = await bcryptjs.hash(userId.toString(), 10);
 
     if (emailType === "VERIFY") {
@@ -18,20 +19,17 @@ export const sendEmail = async ({ email, emailType, userId }: any) => {
       });
     }
 
-    // console.log(process.env.MAILTRAP_USERNAME, process.env.MAILTRAP_PASSWORD);
-
-    const transport = nodemailer.createTransport({
+    var transport = nodemailer.createTransport({
       host: "sandbox.smtp.mailtrap.io",
-      port: 465,
-      secure: true,
+      port: 2525,
       auth: {
-        user: "57a0f3bbb1a99f",
-        pass: "9960e4ff15d69c",
+        user: process.env.MAILTRAP_USERNAME,
+        pass: process.env.MAILTRAP_PASSWORD,
       },
     });
 
     const mailOptions = {
-      from: "hitesh@gmail.com",
+      from: "codezera3@gmail.com",
       to: email,
       subject:
         emailType === "VERIFY" ? "Verify your email" : "Reset your password",
@@ -40,10 +38,10 @@ export const sendEmail = async ({ email, emailType, userId }: any) => {
       }/verifyemail?token=${hashedToken}">here</a> to ${
         emailType === "VERIFY" ? "verify your email" : "reset your password"
       }
-      or copy and paste the link below in your browser. <br> ${
-        process.env.DOMAIN
-      }/verifyemail?token=${hashedToken}
-      </p>`,
+          or copy and paste the link below in your browser. <br> ${
+            process.env.DOMAIN
+          }/verifyemail?token=${hashedToken}
+          </p>`,
     };
 
     const mailresponse = await transport.sendMail(mailOptions);

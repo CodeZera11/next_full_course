@@ -22,7 +22,7 @@ export async function POST(request: NextRequest) {
 
     if (user) {
       return NextResponse.json(
-        { error: "User already exists" },
+        { error: "Email already exists" },
         { status: 400 }
       );
     }
@@ -38,16 +38,17 @@ export async function POST(request: NextRequest) {
 
     const savedUser = await newUser.save();
 
-    await sendEmail({
+    const mailinfo = await sendEmail({
       email,
       emailType: "VERIFY",
-      userId: savedUser._id.toString(),
+      userId: savedUser._id,
     });
 
     return NextResponse.json({
       message: "User created successfully",
       success: true,
       savedUser,
+      mailinfo,
     });
   } catch (error) {
     return NextResponse.json(

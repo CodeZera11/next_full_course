@@ -4,6 +4,7 @@ import axios from "axios";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
+import toast from "react-hot-toast";
 
 export default function SignupPage() {
 
@@ -20,12 +21,21 @@ export default function SignupPage() {
     const onSignup = async () => {
         try {
             setLoading(true)
-            const response = await axios.post("/api/users/signup", user);
-            console.log("UserWithToken", response.data)
-            console.log("User signed up successfully", response.data);
+            const response: any = await axios.post("/api/users/signup", user);
+
+            if (response.data.error) {
+                toast.error(response.data.error)
+            } else if (response.data.message) {
+                toast.success(response.data.message)
+            }
+
             router.push("/login")
-        } catch (error) {
-            console.log(error);
+        } catch (error: any) {
+            if (error.response.data.error) {
+                toast.error(error.response.data.error)
+            } else {
+                toast.error(error.message)
+            }
         } finally {
             setLoading(false)
         }
