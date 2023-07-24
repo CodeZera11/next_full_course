@@ -47,9 +47,13 @@ export default function LoginPage() {
 
                 <button onClick={onLogin} className="rounded-full bg-black text-white p-3 mt-7 w-[100px]">{loading ? "loading..." : "Login"}</button>
 
-                <div className="mt-2">
+                <div className="mt-5">
                     Don&apos;t have an account?
                     <Link className=" text-blue-800 ml-2" href={"/signup"}>Signup here</Link>
+                </div>
+                <div className="mt-1">
+                    Forgot your password?
+                    <Link className=" text-blue-800 ml-2" href={"/forgotPassword"}>Reset Password</Link>
                 </div>
             </div>
         </div>
